@@ -11,7 +11,7 @@ contract MockERC20 {
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
 
-    constructor(string memory _name,string memory _symbol) {
+    constructor(string memory _name, string memory _symbol) {
         name = _name;
         symbol = _symbol;
     }
@@ -21,27 +21,27 @@ contract MockERC20 {
         totalSupply += amount;
     }
 
-    function approve( address spender, uint256 amount ) public returns (bool) {
+    function approve(address spender, uint256 amount) public returns (bool) {
         allowance[msg.sender][spender] = amount;
         return true;
     }
 
-    function transfer(address to,uint256 amount) public returns (bool) {
-        require(balanceOf[msg.sender] >= amount,"Insufficient balance");
+    function transfer(address to, uint256 amount) public returns (bool) {
+        require(balanceOf[msg.sender] >= amount, "Insufficient balance");
         balanceOf[msg.sender] -= amount;
         balanceOf[to] += amount;
 
         return true;
     }
 
-    function transferFrom( address from, address to, uint256 amount) public returns (bool) {
-        require(balanceOf[from] >= amount,  "Insufficient balance");
+    function transferFrom(address from, address to, uint256 amount) public returns (bool) {
+        require(balanceOf[from] >= amount, "Insufficient balance");
 
-        require( allowance[from][msg.sender] >= amount, "Not approved");
-         allowance[from][msg.sender] -= amount;
+        require(allowance[from][msg.sender] >= amount, "Not approved");
+        allowance[from][msg.sender] -= amount;
         balanceOf[from] -= amount;
         balanceOf[to] += amount;
-        
+
         return true;
     }
 }
