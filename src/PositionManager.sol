@@ -10,11 +10,11 @@ contract PositionManager is ERC721 {
     uint256 public nextTokenId;
 
     struct Position {
-        address token0;
-        address token1;
         uint256 liquidity;
         int24 lowerTick;
         int24 upperTick;
+        uint256 amount0;
+        uint256 amount1;
     }
 
     mapping(uint256 => Position) public positions;
