@@ -85,4 +85,22 @@ contract PositionManagerTest is Test {
 
         assertEq(liquidity, 200);
     }
+    function testGetPositionValue() public {
+    vm.startPrank(user);
+
+    token0.approve(address(pool), 100);
+    token1.approve(address(pool), 200);
+
+    uint256 tokenId = positionManager.mint(100, 200, -100, 100);
+
+    (uint256 amount0, uint256 amount1, uint256 totalValueInToken1, uint256 currentPrice) =
+        positionManager.getPositionValue(tokenId);
+
+    vm.stopPrank();
+
+    assertEq(amount0, 100);
+    assertEq(amount1, 200);
+    assertEq(currentPrice, 3000);
+    assertEq(totalValueInToken1, 300200);
+}
 }
