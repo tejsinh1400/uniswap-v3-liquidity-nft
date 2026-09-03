@@ -59,7 +59,9 @@ contract PositionManager is ERC721 {
 
         pool.addLiquidity(msg.sender, amount0, amount1, position.lowerTick, position.upperTick);
 
-        position.liquidity += amount0 + amount1;
+       position.amount0 += amount0;
+       position.amount1 += amount1;
+       position.liquidity += amount0 + amount1;
     }
 
     function decreaseLiquidity(uint256 tokenId, uint256 amount) external {
