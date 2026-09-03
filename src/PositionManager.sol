@@ -36,16 +36,14 @@ contract PositionManager is ERC721 {
         tokenId = nextTokenId++;
 
         positions[tokenId] = Position({
-            token0: address(pool.token0()),
-            token1: address(pool.token1()),
-            liquidity: amount0 + amount1,
-            lowerTick: lowerTick,
-            upperTick: upperTick
-        });
-
-        _mint(msg.sender, tokenId);
+                                         amount0: amount0,
+                                        amount1: amount1,
+                                        lowerTick: lowerTick,
+                                        upperTick: upperTick,
+                                        liquidity: amount0 + amount1
+    });
+     _mint(msg.sender, tokenId);
     }
-
     function getPosition(uint256 tokenId) external view returns (Position memory) {
         require(_ownerOf(tokenId) != address(0), "Position does not exist");
 

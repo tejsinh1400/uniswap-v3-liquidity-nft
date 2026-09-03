@@ -43,19 +43,15 @@ contract PositionManagerTest is Test {
         assertEq(tokenId, 0);
 
         assertEq(positionManager.ownerOf(0), user);
+       (uint256 liquidity, int24 lowerTick, int24 upperTick, uint256 amount0, uint256 amount1) =
+    positionManager.positions(0);
 
-        (address positionToken0, address positionToken1, uint256 liquidity, int24 lowerTick, int24 upperTick) =
-            positionManager.positions(0);
-
-        assertEq(positionToken0, address(token0));
-
-        assertEq(positionToken1, address(token1));
-
-        assertEq(liquidity, 300);
-        assertEq(lowerTick, -100);
-        assertEq(upperTick, 100);
-    }
-
+    assertEq(liquidity, 300);
+    assertEq(lowerTick, -100);
+    assertEq(upperTick, 100);
+    assertEq(amount0, 100);
+    assertEq(amount1, 200);
+}
     function testIncreaseLiquidity() public {
         vm.startPrank(user);
 
@@ -69,11 +65,9 @@ contract PositionManagerTest is Test {
 
         vm.stopPrank();
 
-        (,, uint256 liquidity,,) = positionManager.positions(tokenId);
-
+        (uint256 liquidity,,,,) = positionManager.positions(tokenId);
         assertEq(liquidity, 400);
     }
-
     function testDecreaseLiquidity() public {
         vm.startPrank(user);
 
@@ -87,7 +81,7 @@ contract PositionManagerTest is Test {
 
         vm.stopPrank();
 
-        (,, uint256 liquidity,,) = positionManager.positions(tokenId);
+       (uint256 liquidity,,,,) = positionManager.positions(tokenId);
 
         assertEq(liquidity, 200);
     }
