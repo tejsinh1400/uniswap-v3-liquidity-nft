@@ -43,15 +43,16 @@ contract PositionManagerTest is Test {
         assertEq(tokenId, 0);
 
         assertEq(positionManager.ownerOf(0), user);
-       (uint256 liquidity, int24 lowerTick, int24 upperTick, uint256 amount0, uint256 amount1) =
-    positionManager.positions(0);
+        (uint256 liquidity, int24 lowerTick, int24 upperTick, uint256 amount0, uint256 amount1) =
+            positionManager.positions(0);
 
-    assertEq(liquidity, 300);
-    assertEq(lowerTick, -100);
-    assertEq(upperTick, 100);
-    assertEq(amount0, 100);
-    assertEq(amount1, 200);
-}
+        assertEq(liquidity, 300);
+        assertEq(lowerTick, -100);
+        assertEq(upperTick, 100);
+        assertEq(amount0, 100);
+        assertEq(amount1, 200);
+    }
+
     function testIncreaseLiquidity() public {
         vm.startPrank(user);
 
@@ -68,6 +69,7 @@ contract PositionManagerTest is Test {
         (uint256 liquidity,,,,) = positionManager.positions(tokenId);
         assertEq(liquidity, 400);
     }
+
     function testDecreaseLiquidity() public {
         vm.startPrank(user);
 
@@ -81,26 +83,27 @@ contract PositionManagerTest is Test {
 
         vm.stopPrank();
 
-       (uint256 liquidity,,,,) = positionManager.positions(tokenId);
+        (uint256 liquidity,,,,) = positionManager.positions(tokenId);
 
         assertEq(liquidity, 200);
     }
+
     function testGetPositionValue() public {
-    vm.startPrank(user);
+        vm.startPrank(user);
 
-    token0.approve(address(pool), 100);
-    token1.approve(address(pool), 200);
+        token0.approve(address(pool), 100);
+        token1.approve(address(pool), 200);
 
-    uint256 tokenId = positionManager.mint(100, 200, -100, 100);
+        uint256 tokenId = positionManager.mint(100, 200, -100, 100);
 
-    (uint256 amount0, uint256 amount1, uint256 totalValueInToken1, uint256 currentPrice) =
-        positionManager.getPositionValue(tokenId);
+        (uint256 amount0, uint256 amount1, uint256 totalValueInToken1, uint256 currentPrice) =
+            positionManager.getPositionValue(tokenId);
 
-    vm.stopPrank();
+        vm.stopPrank();
 
-    assertEq(amount0, 100);
-    assertEq(amount1, 200);
-    assertEq(currentPrice, 3000);
-    assertEq(totalValueInToken1, 300200);
-}
+        assertEq(amount0, 100);
+        assertEq(amount1, 200);
+        assertEq(currentPrice, 3000);
+        assertEq(totalValueInToken1, 300200);
+    }
 }

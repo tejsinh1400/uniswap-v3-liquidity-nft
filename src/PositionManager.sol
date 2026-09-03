@@ -36,13 +36,9 @@ contract PositionManager is ERC721 {
         tokenId = nextTokenId++;
 
         positions[tokenId] = Position({
-                                         amount0: amount0,
-                                        amount1: amount1,
-                                        lowerTick: lowerTick,
-                                        upperTick: upperTick,
-                                        liquidity: amount0 + amount1
-    });
-     _mint(msg.sender, tokenId);
+            amount0: amount0, amount1: amount1, lowerTick: lowerTick, upperTick: upperTick, liquidity: amount0 + amount1
+        });
+        _mint(msg.sender, tokenId);
     }
 
     function increaseLiquidity(uint256 tokenId, uint256 amount0, uint256 amount1) external {
@@ -54,9 +50,9 @@ contract PositionManager is ERC721 {
 
         pool.addLiquidity(msg.sender, amount0, amount1, position.lowerTick, position.upperTick);
 
-       position.amount0 += amount0;
-       position.amount1 += amount1;
-       position.liquidity += amount0 + amount1;
+        position.amount0 += amount0;
+        position.amount1 += amount1;
+        position.liquidity += amount0 + amount1;
     }
 
     function decreaseLiquidity(uint256 tokenId, uint256 amount) external {
@@ -69,15 +65,19 @@ contract PositionManager is ERC721 {
         positions[tokenId].liquidity -= amount;
     }
 
-    function getPositionValue(uint256 tokenId) external view returns (uint256 amount0,uint256 amount1,uint256 totalValueInToken1,uint256 currentPrice){
-    require(ownerOf(tokenId) != address(0), "Position does not exist");
+    function getPositionValue(uint256 tokenId)
+        external
+        view
+        returns (uint256 amount0, uint256 amount1, uint256 totalValueInToken1, uint256 currentPrice)
+    {
+        require(ownerOf(tokenId) != address(0), "Position does not exist");
 
-    Position memory position = positions[tokenId];
+        Position memory position = positions[tokenId];
 
-    amount0 = position.amount0;
-    amount1 = position.amount1;
-    currentPrice = pool.currentPrice();
+        amount0 = position.amount0;
+        amount1 = position.amount1;
+        currentPrice = pool.currentPrice();
 
-    totalValueInToken1 = (amount0 * currentPrice) + amount1;
-}
+        totalValueInToken1 = (amount0 * currentPrice) + amount1;
+    }
 }
