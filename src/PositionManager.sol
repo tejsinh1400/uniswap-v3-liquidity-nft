@@ -44,11 +44,6 @@ contract PositionManager is ERC721 {
     });
      _mint(msg.sender, tokenId);
     }
-    function getPosition(uint256 tokenId) external view returns (Position memory) {
-        require(_ownerOf(tokenId) != address(0), "Position does not exist");
-
-        return positions[tokenId];
-    }
 
     function increaseLiquidity(uint256 tokenId, uint256 amount0, uint256 amount1) external {
         require(ownerOf(tokenId) == msg.sender, "Not position owner");
@@ -73,4 +68,16 @@ contract PositionManager is ERC721 {
 
         positions[tokenId].liquidity -= amount;
     }
+
+    function getPositionValue(uint256 tokenId) external view returns (uint256 amount0,uint256 amount1,uint256 totalValueInToken1,uint256 currentPrice){
+    require(ownerOf(tokenId) != address(0), "Position does not exist");
+
+    Position memory position = positions[tokenId];
+
+    amount0 = position.amount0;
+    amount1 = position.amount1;
+    currentPrice = pool.currentPrice();
+
+    totalValueInToken1 = (amount0 * currentPrice) + amount1;
+}
 }
